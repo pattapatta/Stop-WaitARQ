@@ -10,6 +10,7 @@ class Server
     protected:
 
     private:
+
 };
 
 #endif // SERVER_H
