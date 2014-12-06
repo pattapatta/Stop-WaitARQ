@@ -4,12 +4,12 @@
 #include <frame.hpp>
 
 template<typename OIter>
-class ServerSWARQ{
+class ServerSWARQ{ĺ
 public:
-  ServerSWARQ(boost::asio::io_service io_service, 
-	      const unsigned short & p);
+  ServerSWARQ(boost::asio::io_service io_service,
+	      const unsigned short & port);
   size_t receive_nbyte(OIter out, size_t nbyte);
-  Frame receive_frame();
+  size_t receive_frame();
   void reset_frame_cnt();
 private:
   uint32_t frame_counter;
