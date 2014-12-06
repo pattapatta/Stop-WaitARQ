@@ -6,7 +6,7 @@
 #include <cstdlib>
 
 template<typename OIter>
-<<<<<<< HEAD
+
 ServerSWARQ::ServerSWARQ(boost::asio::io_service,
 			 const unsigned short & port)
   : port(p){
@@ -15,9 +15,10 @@ ServerSWARQ::ServerSWARQ(boost::asio::io_service,
     frame_counter = 0;
 }
 
+
 /*
-    Riceve dati da un endpoint, li legge sul socket e li scrive sul buffe con la
-      receive from.
+  Riceve dati da un endpoint, li legge sul socket e li scrive sul buffe con la
+    receive from.
 */
 size_t ServerSWARQ::receive_frame(Frame &frame){
 
@@ -25,8 +26,10 @@ size_t ServerSWARQ::receive_frame(Frame &frame){
     udp::endpoint remote_endpoint;
 
     // Buffer temporaneo, poi uso quello di boost
+    // ci metto dentro i dati che ricevo dal socket
     char[max_length] rcv_buffer;
 
+    // ( il tutorial ce lo mette, poi vedo come mai )
     boost::system::error_code error;
 
     // lunghezza del frame letto
@@ -46,6 +49,8 @@ size_t ServerSWARQ::receive_frame(Frame &frame){
 
     Frame temp(rcv_buffer, lenght);
     frame.swap(temp);
+
+    return lenght;
 }
 
 /* funzione che dato un numero di byte da leggere,
@@ -54,18 +59,18 @@ size_t ServerSWARQ::receive_frame(Frame &frame){
  * output iterator per comporre l'insieme di dati completo.
  *
  * ritorna la posizione dell'ultimo byte scritto nell'output
- * itearator 
+ * itearator
  */
 template<typename OIter>
 OIter ServerSWARQ<OIter>::ServeSWARQ(OIter out, size_t nbyte){
   size_t nbyte_recv = 0;
-  
+
   while(nbyte_recv < nbyte){
     Frame frame();
 
     // riempio il frame con header e payload ricevuti
     receive_frame(frame);
-    
+
     //controllo se il frame ricevuto è doppio
     if(frame_counter != frame.get_num()){
       // accetto il frame e lo accodo nell'output
@@ -82,9 +87,11 @@ OIter ServerSWARQ<OIter>::ServeSWARQ(OIter out, size_t nbyte){
       n_byte_recv += frame.get_data_len();
     }
   }
-} 
+}
 
 
-
+void ServerSWARQ::reset_frame_cnt(){
+    frame_counter = 0;
+}
 
 #endif // SERVERSWARQ_TEMPLATES_HPP
