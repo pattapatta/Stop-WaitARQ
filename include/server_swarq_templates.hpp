@@ -6,7 +6,6 @@
 #include <cstdlib>
 
 template<typename OIter>
-<<<<<<< HEAD
 ServerSWARQ::ServerSWARQ(boost::asio::io_service,
 			 const unsigned short & port)
   : port(p){
@@ -16,9 +15,9 @@ ServerSWARQ::ServerSWARQ(boost::asio::io_service,
 }
 
 /*
-    Riceve dati da un endpoint, li legge sul socket e li scrive sul buffe con la
-      receive from.
-*/
+ * Riceve dati da un endpoint, li legge sul socket e li scrive sul buffe con la
+ * receive from.
+ */
 size_t ServerSWARQ::receive_frame(Frame &frame){
 
     // l'endpoint rappresenta il client con cui dialogo
@@ -83,8 +82,5 @@ OIter ServerSWARQ<OIter>::ServeSWARQ(OIter out, size_t nbyte){
     }
   }
 } 
-
-
-
 
 #endif // SERVERSWARQ_TEMPLATES_HPP
