@@ -25,7 +25,7 @@ public:
   size_t get_data_len() const;
 
   size_t serialize(char * byte_array) const;
-  void swap(Frame & x)
+  void swap(Frame & x);
 };
 
 #endif // FRAME_HPP

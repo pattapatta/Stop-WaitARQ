@@ -4,6 +4,8 @@
 #include <algorithm> // std::copy
 #include <cstdlib>
 
+#include <stdint.h> // UINT32_MAX
+
 #include <boost/asio.hpp>
 
 #include "frame.hpp"
