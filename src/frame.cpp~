@@ -73,9 +73,3 @@ size_t Frame::serialize(char * byte_array) const{
 
   return num_size + data_len;
 }
-
-void swap(Frame & x){
-  std::swap(num, x.num);
-  std::swap(data, x.data);
-  std::swap(data_len, x.data_len);
-}

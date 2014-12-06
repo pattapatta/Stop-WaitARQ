@@ -1,16 +1,20 @@
 #ifndef SERVERSWARQ_HPP
 #define SERVERSWARQ_HPP
 
-#include <frame.hpp>
+#include <algorithm> // std::copy
+
+#include "frame.hpp"
 
 template<typename OIter>
 class ServerSWARQ{ĺ
 public:
+
   ServerSWARQ(boost::asio::io_service io_service,
 	      const unsigned short & port);
-  size_t receive_nbyte(OIter out, size_t nbyte);
-  size_t receive_frame();
+  size_t receive_frame(Frame &frame);
   void reset_frame_cnt();
+  OIter receive_nbyte(OIter out, size_t nbyte);
+
 private:
   uint32_t frame_counter;
   boost::asio::io_service & io_service;
