@@ -2,6 +2,9 @@
 #define SERVERSWARQ_HPP
 
 #include <algorithm> // std::copy
+#include <cstdlib>
+
+#include <boost/asio.hpp>
 
 #include "frame.hpp"
 

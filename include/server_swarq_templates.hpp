@@ -1,10 +1,6 @@
 #ifndef SERVERSWAQR_TEMPLATES_HPP
 #define SERVERSWARQ_TEMPLATES_HPP
 
-#include <boost/asio>
-#include "frame.hpp"
-#include <cstdlib>
-
 template<typename OIter>
 ServerSWARQ::ServerSWARQ(boost::asio::io_service,
 			 const unsigned short & port)
