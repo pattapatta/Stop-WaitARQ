@@ -6,12 +6,13 @@
 
 /* costruttore senza parametri
 */
-Frame::Frame() : num(0), data(null), data_len(0) { }
+Frame::Frame() : num(0), data(0), data_len(0) { }
 
 /* costruisce il frame a partire da un array di byte estraendo
  * il nunero del frame dall'header (4 byte) e il messaggio
  */
 Frame::Frame(const char * buffer, const size_t & len){
+
   size_t num_size = sizeof(uint32_t);
   data_len = len - num_size;
 
@@ -42,6 +43,7 @@ Frame::~Frame(){
 // Costruttore di copia
 //
 Frame::Frame(const Frame & f){
+  std::cout << "costr di copia" << std::endl;
   num = f.num;
 
   data_len = f.data_len;
@@ -74,7 +76,7 @@ size_t Frame::serialize(char * byte_array) const{
   return num_size + data_len;
 }
 
-void swap(Frame & x){
+void Frame::swap(Frame & x){
   std::swap(num, x.num);
   std::swap(data, x.data);
   std::swap(data_len, x.data_len);

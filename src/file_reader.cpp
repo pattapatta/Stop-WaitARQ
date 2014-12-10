@@ -1,6 +1,7 @@
 #include "file_reader.hpp"
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
 
 file_reader::file_reader(string file)
 {
@@ -15,20 +16,19 @@ file_reader::~file_reader()
     fclose(stream);
 }
 
-char* file_reader::read_next_bytes(size_t i)
+size_t file_reader::read_next_bytes(char * main_buffer, size_t i)
 {
     char buffer[i];
     int control = fread(buffer, sizeof(char), i, stream);
     if(control){
        last_read_bytes = i;
        main_buff_size = control;
-       main_buffer = new char[main_buff_size];
        for(int i = 0; i<main_buff_size; i++)
             main_buffer[i] = buffer[i];
-       return main_buffer;
+       return control;
     }
     else
-        return NULL;
+        return 0;
 }
 
 /*
@@ -66,12 +66,13 @@ char* file_reader::print_bytes(FILE* file){
 bool file_reader::file_ended(){
     char c[1];
     FILE* current = stream;
+    
     if(fread(c,sizeof(char),1,current)){
         return true;
     }
-    else
+    else{
         return false;
-
+    }
 }
 
 int file_reader::get_buff_size(){

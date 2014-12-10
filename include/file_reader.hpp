@@ -9,46 +9,46 @@ using namespace std;
 
 class file_reader
 {
-    private:
+private:
 
-        // attributo settato dall'ultima read_next_bytes
-        size_t last_read_bytes;
+  // attributo settato dall'ultima read_next_bytes
+  size_t last_read_bytes;
 
-        // file aperto in lettura
-        const char* nome_file;
+  // file aperto in lettura
+  const char* nome_file;
 
-        // indicatore interno della posizione del file
-        FILE* stream;
+  // indicatore interno della posizione del file
+  FILE* stream;
 
-        // dimensione del main buffer
-        int main_buff_size;
+  // dimensione del main buffer
+  int main_buff_size;
 
-        // array contenente glu ultimi last_read_bytes letti
-        char* main_buffer;
+  // array contenente glu ultimi last_read_bytes letti
+  char* main_buffer;
 
-        // privato non implementato, occorre specificare una stringa
-        file_reader();
+  // privato non implementato, occorre specificare una stringa
+  file_reader();
 
-    public:
+public:
 
-        // apro un file di nome Nome
-        file_reader(string Nome);
+  // apro un file di nome Nome
+  file_reader(string Nome);
 
-        // Leggo i prossimi i bytes
-        char* read_next_bytes(size_t i);
+  // Leggo i prossimi i bytes
+  size_t read_next_bytes(char * main_buffer, size_t i);
 
-        // controllo se sono alla fine del file
-        bool file_ended();
+  // controllo se sono alla fine del file
+  bool file_ended();
 
-        // chiudo il file
-        ~file_reader();
+  // chiudo il file
+  ~file_reader();
 
-        int get_buff_size();
+  int get_buff_size();
 
 
-        char* print_bytes(char* out_buffer);
-        char* print_bytes(ostream &dest); // TODO
-        char* print_bytes(FILE* file);  // TODO
+  char* print_bytes(char* out_buffer);
+  char* print_bytes(ostream &dest); // TODO
+  char* print_bytes(FILE* file);  // TODO
 
 
 };
