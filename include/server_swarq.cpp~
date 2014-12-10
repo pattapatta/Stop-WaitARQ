@@ -1,0 +1,130 @@
+#ifndef SERVERSWARQ_HPP
+#define SERVERSWARQ_HPP
+
+#include <algorithm> // std::copy
+#include <cstdlib>
+
+#include <stdint.h> // UINT32_MAX
+
+#include <boost/asio/io_service.hpp>
+#include <boost/asio/ip/udp.hpp>
+
+#include "frame.hpp"
+
+#include <ctime>
+#include <cstdlib>
+
+class ServerSWARQ{
+public:
+  /*
+  ServerSWARQ(boost::asio::io_service & io_service,
+	      const unsigned short & port)
+  */
+  ServerSWARQ(boost::asio::io_service & io_service,
+	      const short & port) 
+    : socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port)){
+	  
+  }
+
+  size_t receive_frame(Frame & frame);
+  
+  template<typename OIter>
+  OIter receive_nbyte(OIter out, size_t nbyte);
+
+private:
+  uint32_t frame_counter;
+  boost::asio::ip::udp::socket socket;
+  static const size_t max_length = 1024;
+};
+
+ 
+
+   /*
+ServerSWARQ::ServerSWARQ(boost::asio::io_service & io_service, const unsigned short & p):io_service(io_service){
+  //socket = socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port));
+  frame_counter = 0;
+}
+   */
+
+/*
+  Riceve dati da un endpoint, li legge sul socket e li scrive sul buffe con la
+  receive from.
+*/
+
+size_t ServerSWARQ::receive_frame(Frame & frame){
+
+  // l'endpoint rappresenta il client con cui dialogo
+  boost::asio::ip::udp::endpoint remote_endpoint;
+
+
+  // Buffer temporaneo, poi uso quello di boost
+  // ci metto dentro i dati che ricevo dal socket
+
+  // Buffer temporaneo, poi uso quello di boost
+  char rcv_buffer[max_length];
+
+  boost::system::error_code error;
+
+  // lunghezza del frame letto
+  size_t length;
+  length = socket.receive_from(boost::asio::buffer(rcv_buffer, max_length), remote_endpoint, 0 , error);
+
+  Frame recv_frame(rcv_buffer, length);
+  frame.swap(recv_frame);
+
+  char ack_buffer[max_length];
+  Frame ack_frame(frame.get_num(), "ACK", strlen("ACK")+1);
+
+  size_t ack_buffer_size;
+  ack_buffer_size = ack_frame.serialize(ack_buffer);
+
+  // ispirato da esempio http://www.boost.org/doc/libs/1_35_0/doc/html/boost_asio/tutorial/tutdaytime5.html
+  boost::system::error_code ignored_error;
+
+  socket.send_to(boost::asio::buffer(ack_buffer, ack_buffer_size),
+		 remote_endpoint, 0, ignored_error);
+  std::cout << "ACK sent" << std::endl;
+
+  return length;
+}
+
+/* funzione che dato un numero di byte da leggere,
+ * riceve pacchetti dalla rete attraverso il protocollo
+ * stop and wait ARQ. Accoda i pacchetti ricevuti in un
+ * output iterator per comporre l'insieme di dati completo.
+ *
+ * ritorna la posizione dell'ultimo byte scritto nell'output
+ * itearator
+ */
+template<typename OIter>
+OIter ServerSWARQ::receive_nbyte(OIter out, size_t nbyte){
+  size_t nbyte_recv = 0;
+
+  Frame frame(0, "", 0);
+
+ 
+  do{
+    // riempio il frame con header e payload ricevuti
+    receive_frame(frame);
+    
+    //controllo se il frame ricevuto è doppio
+    if(frame_counter != frame.get_num()){
+      // accetto il frame e lo accodo nell'output
+
+      out = std::string(frame.get_data());
+      ++out;
+
+      // aggiorno il frame_counter (modulo UINT32 MAX per
+      // evitare overflow
+      frame_counter = (frame_counter + 1) % UINT32_MAX;
+      
+      // aggiorno il counter dei byte ricevuti con la grandezza
+      // del payload del frame
+      nbyte_recv = nbyte_recv + frame.get_data_len();
+    }
+  }while(nbyte_recv < nbyte && frame.get_data_len() > 0);
+}
+
+//#include "server_swarq_templates.hpp"
+
+#endif // SERVERSWARQ_HPP
