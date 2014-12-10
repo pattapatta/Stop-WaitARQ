@@ -21,4 +21,7 @@ test_client: test_client.o client_swarq.o frame.o file_reader.o
 
 test_server: test_server.o server_swarq.o frame.o
 	g++ test_server.o server_swarq.o frame.o -lboost_system -lpthread -o test_server
+clean:
+	rm client_swarq.o frame.o file_reader.o server_swarq.o test_client.o test_server.o
+
 
