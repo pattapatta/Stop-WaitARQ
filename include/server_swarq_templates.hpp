@@ -15,19 +15,33 @@ OIter ServerSWARQ::receive_nbyte(OIter out, size_t nbyte){
 
   Frame frame(0, "", 0);
 
-  while(nbyte_recv < nbyte){
+  do{
     // riempio il frame con header e payload ricevuti
-    receive_frame(frame);
+    /*nbyte_recv = */receive_frame(frame);
+
+    nbyte_recv = frame.get_data_len();
 
     //controllo se il frame ricevuto è doppio
-    if(frame_counter != frame.get_num()){
+    if(frame_counter != frame.get_num() && nbyte_recv){
       // accetto il frame e lo accodo nell'output
-      //char * begin = frame.get_data();
-      //char * end = begin + frame.get_data_len();
-      //out = std::copy(begin, end, out);
+      char * begin = frame.get_data();
+      char * end = begin + frame.get_data_len();
+      out = std::copy(begin, end, out);
 
-      *out = std::string(frame.get_data());
-      ++out;
+      //frame.get_data()[frame.get_data_len()] = '\0';
+      /*
+      for(int i=0; i<frame.get_data_len(); ++i)
+	std::cout << (int)frame.get_data()[i] << " ";
+
+      char c;
+      std::cin >> c;
+      */
+      //*out = std::string(1, frame.get_data()[0]);
+      //std::cout << "rcv: "<< frame.get_data_len() << std::endl;
+      /*std::cout << "rcv: "
+		<< std::string(1, frame.get_data()[0]) << std::endl;
+      */
+      //++out;
 
       // aggiorno il frame_counter (modulo UINT32 MAX per
       // evitare overflow
@@ -35,9 +49,13 @@ OIter ServerSWARQ::receive_nbyte(OIter out, size_t nbyte){
 
       // aggiorno il counter dei byte ricevuti con la grandezza
       // del payload del frame
-      nbyte_recv = nbyte_recv + frame.get_data_len();
+      // nbyte_recv = nbyte_recv + frame.get_data_len();
     }
-  }
+
+    //std::cout << "nbyte_recv = " << nbyte_recv << std::endl;
+  }while(nbyte_recv);
+
+  return out;
 }
 
 #endif // SERVERSWARQ_TEMPLATES_HPP

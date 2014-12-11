@@ -46,7 +46,7 @@ std::size_t client_swarq::send_to(const Frame & frame){
     
   Frame recv_frame(recv_buffer, length);
     
-  std::cout << recv_frame.get_num() << " " << recv_frame.get_data() << std::endl;
+  //std::cout << recv_frame.get_num() << " " << recv_frame.get_data() << std::endl;
   /*
     s = recv_frame.get_data();
     }while(s != "ACK");

@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "FileReader.cpp"
+#include "file_reader.hpp"
 
 using namespace std;
 
