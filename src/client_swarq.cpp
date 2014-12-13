@@ -5,7 +5,7 @@
 client_swarq::client_swarq(boost::asio::io_service & io_service, 
 			   const std::string & server, 
 			   const std::string & port, 
-			   boost::posix_time::seconds t) 
+			   boost::posix_time::milliseconds t) 
 
   : io_service(io_service), socket(io_service), 
     timer(io_service), timeout(t){

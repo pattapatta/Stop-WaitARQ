@@ -3,8 +3,24 @@
 #include "frame.hpp"
 #include "server_swarq.hpp"
 
+void print_usage(){
+  std::cout << "test_client <port>" << std::endl
+	    << "     port: port to listen;" << std::endl
+	    << std::endl;
+
+  std::cout << "     example:" << std::endl
+	    << "          $./test_server 25000"
+	    << std::endl;
+}
+
 int main(int argc, char ** argv){
   boost::asio::io_service io_service;
+
+  if(argc < 2){
+    print_usage();
+    exit(1);
+  }
+  
 
   do{
 

@@ -25,7 +25,7 @@ public:
   client_swarq(boost::asio::io_service & io_service, 
 	     const std::string & server, 
 	     const std::string & port, 
-	     boost::posix_time::seconds t);
+	     boost::posix_time::milliseconds t);
 
   /* Funzione che spedisce un frame (composto da <num, msg>)
    * sul socket. Resta in attesa per l'ack di risposta e 
