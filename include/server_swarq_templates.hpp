@@ -10,50 +10,29 @@
  * itearator
  */
 template<typename OIter>
-OIter ServerSWARQ::receive_nbyte(OIter out, size_t nbyte){
-  size_t nbyte_recv = 0;
+OIter ServerSWARQ::receive_nbyte(OIter out, unsigned & nbyte_recv){
+  nbyte_recv = 0;
 
   Frame frame(0, "", 0);
 
   do{
     // riempio il frame con header e payload ricevuti
-    /*nbyte_recv = */receive_frame(frame);
-
-    nbyte_recv = frame.get_data_len();
+    receive_frame(frame);
 
     //controllo se il frame ricevuto è doppio
-    if(frame_counter != frame.get_num() && nbyte_recv){
+    if(frame_counter != frame.get_num() && frame.get_data_len()){
       // accetto il frame e lo accodo nell'output
       char * begin = frame.get_data();
       char * end = begin + frame.get_data_len();
       out = std::copy(begin, end, out);
 
-      //frame.get_data()[frame.get_data_len()] = '\0';
-      /*
-      for(int i=0; i<frame.get_data_len(); ++i)
-	std::cout << (int)frame.get_data()[i] << " ";
-
-      char c;
-      std::cin >> c;
-      */
-      //*out = std::string(1, frame.get_data()[0]);
-      //std::cout << "rcv: "<< frame.get_data_len() << std::endl;
-      /*std::cout << "rcv: "
-		<< std::string(1, frame.get_data()[0]) << std::endl;
-      */
-      //++out;
-
       // aggiorno il frame_counter (modulo UINT32 MAX per
-      // evitare overflow
+      // evitare overflow)
       frame_counter = (frame_counter + 1) % UINT32_MAX;
 
-      // aggiorno il counter dei byte ricevuti con la grandezza
-      // del payload del frame
-      // nbyte_recv = nbyte_recv + frame.get_data_len();
+      nbyte_recv = nbyte_recv + frame.get_data_len();
     }
-
-    //std::cout << "nbyte_recv = " << nbyte_recv << std::endl;
-  }while(nbyte_recv);
+  }while(frame.get_data_len());
 
   return out;
 }

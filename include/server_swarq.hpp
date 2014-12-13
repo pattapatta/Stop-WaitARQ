@@ -20,7 +20,7 @@ public:
 	      const unsigned short & port);
   size_t receive_frame(Frame &frame);
   template<typename OIter>
-  OIter receive_nbyte(OIter out, size_t nbyte);
+  OIter receive_nbyte(OIter out, unsigned & nbyte_recv);
 
 private:
   uint32_t frame_counter;

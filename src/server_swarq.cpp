@@ -42,7 +42,6 @@ size_t ServerSWARQ::receive_frame(Frame & frame){
 
   socket.send_to(boost::asio::buffer(ack_buffer, ack_buffer_size),
 		 remote_endpoint, 0, ignored_error);
-  //std::cout << "ACK sent" << std::endl;
 
   return length;
 }

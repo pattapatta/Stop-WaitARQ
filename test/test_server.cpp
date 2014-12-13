@@ -5,24 +5,35 @@
 
 int main(int argc, char ** argv){
   boost::asio::io_service io_service;
-  ServerSWARQ s(io_service, atoi(argv[1]));
+
+  do{
+
+    ServerSWARQ s(io_service, atoi(argv[1]));
  
-  Frame nome_file_frame;
-  unsigned len = s.receive_frame(nome_file_frame);
+    Frame nome_file_frame;
+    unsigned len = s.receive_frame(nome_file_frame);
   
-  /*std::cout << "#Receive " << len << " bytes: " << std::endl
-	    << " data: " << nome_file_frame.get_data() << std::endl
-	    << " len: " << nome_file_frame.get_data_len() << std::endl
-	    << " num: " << nome_file_frame.get_num() << std::endl
-            << "-------------------------------------------"
-	    << std::endl;
-  */
-  std::ofstream file(nome_file_frame.get_data());
+    std::ofstream file(nome_file_frame.get_data());
 
-  //std::ostream_iterator<std::string> out(file);
-  std::ostreambuf_iterator<char> out (file.rdbuf());
+    std::ostreambuf_iterator<char> out (file.rdbuf());
 
-  s.receive_nbyte(out, 1000);
+    unsigned nbyte_recv = 0;
+
+    time_t time_begin, time_end;
+
+    const clock_t begin_time = clock();
+    s.receive_nbyte(out, nbyte_recv);
+    const clock_t end_time = clock();
+
+    double time = (double)(end_time - begin_time)/CLOCKS_PER_SEC;
+
+    std::cout << "#received file: " << nome_file_frame.get_data()
+	      << " of " << nbyte_recv << " bytes in "
+	      << (float)(end_time - begin_time)/CLOCKS_PER_SEC
+	      << " seconds [" << (nbyte_recv/1024)/time << " KB/s]" 
+	      << std::endl;
+
+  }while(true);
 
   return 0;
 }

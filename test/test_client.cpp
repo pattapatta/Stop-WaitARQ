@@ -27,24 +27,11 @@ int main(int argc, char ** argv){
 
   do{     
     len = freader.read_next_bytes(buffer, buffer_size);
-    
-    /*
-    buffer[len] = '\0';
-    std::cout << len << " " << (int)cnt << " " 
-	      << std::string(buffer) << std::endl;
-    */
 
     Frame frame_file_bytes(cnt, buffer, len);
 
     cnt = cnt + 1;
-    nbyte_sent = c.send_to(frame_file_bytes);
-
-    //std::cout << " nbyte_sent = " << nbyte_sent << std::endl;
-    
+    nbyte_sent = c.send_to(frame_file_bytes);    
   }while(len);
 
-  //std::cout << "oksaas" << std::endl;
-
-  //Frame frame_stop("", 0);
-  //c.send_to(frame_stop);
 }
