@@ -92,6 +92,7 @@ std::size_t client_swarq::send_to(const Frame & frame){
 void client_swarq::check_deadline(boost::system::error_code * ec){
   if (timer.expires_at() <= boost::asio::deadline_timer::traits_type::now()){
     *ec = boost::asio::error::interrupted;
+    //std::cout << "timeout" << std::endl;
     timer.expires_at(boost::posix_time::pos_infin);
   }
 }

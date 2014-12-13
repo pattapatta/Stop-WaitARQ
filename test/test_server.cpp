@@ -1,7 +1,15 @@
 #include <fstream>
 
+#include <boost/date_time.hpp>
+
 #include "frame.hpp"
 #include "server_swarq.hpp"
+
+double get_current_time(){
+  struct timeval tempo;
+  gettimeofday(&tempo, NULL);
+  return tempo.tv_sec + (tempo.tv_usec/1000000.0);
+}
 
 void print_usage(){
   std::cout << "test_client <port>" << std::endl
@@ -37,15 +45,16 @@ int main(int argc, char ** argv){
 
     time_t time_begin, time_end;
 
-    const clock_t begin_time = clock();
+    double start_time = get_current_time();
     s.receive_nbyte(out, nbyte_recv);
-    const clock_t end_time = clock();
+    double end_time = get_current_time();
 
-    double time = (double)(end_time - begin_time)/CLOCKS_PER_SEC;
+    double time = end_time - start_time;
 
+    std::cout.precision(3);
     std::cout << "#received file: " << nome_file_frame.get_data()
 	      << " of " << nbyte_recv << " bytes in "
-	      << (float)(end_time - begin_time)/CLOCKS_PER_SEC
+	      << time
 	      << " seconds [" << (nbyte_recv/1024)/time << " KB/s]" 
 	      << std::endl;
 
