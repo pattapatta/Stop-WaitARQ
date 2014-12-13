@@ -7,7 +7,7 @@ frame.o: ./src/frame.cpp
 file_reader.o: ./src/file_reader.cpp
 	g++ -c -I ./include ./src/file_reader.cpp -o file_reader.o
 
-server_swarq.o: ./src/server_swarq.cpp
+server_swarq.o: ./include/server_swarq_templates.hpp ./src/server_swarq.cpp
 	g++ -c -I ./include ./src/server_swarq.cpp -o server_swarq.o
 
 test_client.o: ./test/test_client.cpp

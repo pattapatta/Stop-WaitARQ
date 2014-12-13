@@ -43,7 +43,6 @@ Frame::~Frame(){
 // Costruttore di copia
 //
 Frame::Frame(const Frame & f){
-  std::cout << "costr di copia" << std::endl;
   num = f.num;
 
   data_len = f.data_len;
@@ -80,4 +79,10 @@ void Frame::swap(Frame & x){
   std::swap(num, x.num);
   std::swap(data, x.data);
   std::swap(data_len, x.data_len);
+}
+
+Frame & Frame::operator=(const Frame & x){
+  Frame tmp(x);
+  swap(tmp);
+  return *this;
 }

@@ -26,9 +26,9 @@ OIter ServerSWARQ::receive_nbyte(OIter out, unsigned & nbyte_recv){
       char * end = begin + frame.get_data_len();
       out = std::copy(begin, end, out);
 
-      // aggiorno il frame_counter (modulo UINT32 MAX per
-      // evitare overflow)
-      frame_counter = (frame_counter + 1) % UINT32_MAX;
+      // non temo overflow poichè il tipo di
+      // frame_counter è unsigned int (wrap around)
+      ++frame_counter;
 
       nbyte_recv = nbyte_recv + frame.get_data_len();
     }

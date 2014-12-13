@@ -26,6 +26,7 @@ public:
 
   size_t serialize(char * byte_array) const;
   void swap(Frame & x);
+  Frame & operator=(const Frame & x);
 };
 
 #endif // FRAME_HPP
